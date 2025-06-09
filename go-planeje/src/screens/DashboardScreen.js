@@ -1,37 +1,64 @@
 // ==============================
 // /screens/DashboardScreen.js
 // ==============================
+
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import useFetch from '../hooks/useFetch';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
-export default function DashboardScreen({ navigation }) {
-  const { data, loading } = useFetch('https://jsonplaceholder.typicode.com/posts');
-
-  if (loading) {
-    return <ActivityIndicator size="large" style={{ marginTop: 100 }} />;
-  }
+export default function DashboardScreen() {
+  const viagens = [
+    { id: 1, titulo: 'Viagem 1', descricao: 'Descrição' },
+    { id: 2, titulo: 'Viagem 1', descricao: 'Descrição' },
+    { id: 3, titulo: 'Viagem 3', descricao: '' }
+  ];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Viagens</Text>
-      <FlatList
-        data={data.slice(0, 10)}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Details', { item })}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            <Text numberOfLines={2}>{item.body}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      <Text style={styles.title}>viagens</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {viagens.map((viagem) => (
+          <View key={viagem.id} style={styles.card}>
+            <Text style={styles.cardTitle}>{viagem.titulo}</Text>
+            {viagem.descricao !== '' && (
+              <Text style={styles.cardDescription}>{viagem.descricao}</Text>
+            )}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 12 },
-  card: { backgroundColor: '#eee', padding: 12, borderRadius: 8, marginBottom: 10 },
-  cardTitle: { fontSize: 18, fontWeight: 'bold' }
+  container: {
+    flex: 1,
+    backgroundColor: '#e0e0e0', // cor cinza claro
+    paddingTop: 60
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 20
+  },
+  card: {
+    backgroundColor: '#4e4646', // cor cinza escuro (quase marrom)
+    padding: 20,
+    borderRadius: 6,
+    marginBottom: 20
+  },
+  cardTitle: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 5,
+    textAlign: 'center'
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#000',
+    textAlign: 'center'
+  }
 });

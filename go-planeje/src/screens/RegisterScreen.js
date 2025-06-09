@@ -4,20 +4,24 @@
 // ==============================
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-// import { auth } from '../../firebaseConfig';
+import { firebase } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const handleRegister = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, senha);
-      navigation.replace('Dashboard');
-    } catch (error) {
-      Alert.alert('Erro', 'Não foi possível cadastrar');
-    }
+  const handleSignUp = () => {
+    
+    // auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then(userCredential => {
+    //     setUser(userCredential.user);
+    //     setError('');
+    //   })
+    //   .catch(error => {
+    //     setError(error.message);
+    //   });
   };
 
   return (
@@ -25,7 +29,7 @@ export default function RegisterScreen({ navigation }) {
       <Text style={styles.title}>Cadastro</Text>
       <TextInput placeholder="Email" style={styles.input} onChangeText={setEmail} value={email} />
       <TextInput placeholder="Senha" style={styles.input} secureTextEntry onChangeText={setSenha} value={senha} />
-      <Button title="Cadastrar" onPress={handleRegister} />
+      <Button title="Cadastrar" onPress={handleSignUp} />
     </View>
   );
 }

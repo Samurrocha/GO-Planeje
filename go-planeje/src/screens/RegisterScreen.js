@@ -4,25 +4,29 @@
 // ==============================
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { firebase } from '../../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConfig'; 
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const handleSignUp = () => {
-    
-    // auth()
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then(userCredential => {
-    //     setUser(userCredential.user);
-    //     setError('');
-    //   })
-    //   .catch(error => {
-    //     setError(error.message);
-    //   });
-  };
+  const handleSignUp = async (email, password) =>  {
+    try {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error("Erro ao criar usuário:", errorCode, errorMessage);
+        });
+    } catch (e) {
+      console.error("Erro ao criar usuário:", error.message);
+      throw error;
+    }
+  }
 
   return (
     <View style={styles.container}>

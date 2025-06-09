@@ -5,31 +5,32 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { auth } from '../../firebaseConfig';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
-// import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
+  
 
-  const handleSignIn = () => {
-    if (password !== confirmPassword) {
-      alert("Passwords don't match.")
-      return
+  const handleSignIn = async (email, password) => {
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
     }
+    catch (e) {
+      console.error("Erro ao fazer login:", e.message);
+      setError("Erro ao fazer login. Verifique suas credenciais.");
+    }
+  }
 
-    auth()
-
-    // auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(userCredential => {
-    //     setUser(userCredential.user);
-    //     setError('');
-    //   })
-    //   .catch(error => {
-    //     setError(error.message);
-    //   });
-  };
 
   return (
     <View style={styles.container}>
@@ -77,7 +78,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.authButtonText}>Continue com Apple</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.registerText}>Não tem uma conta ainda? registre-se já</Text>
       </TouchableOpacity>
 

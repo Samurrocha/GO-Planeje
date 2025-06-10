@@ -4,30 +4,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { auth } from '../../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
-  
+  const [message, setMessage] = useState('');
+  const [messageColor, setMessageColor] = useState('');
+
 
   const handleSignIn = async (email, password) => {
     try {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user;
+      setMessage('Login realizado com sucesso!');
+      setMessageColor('green');
+      console.log("Usuário logado:")
+
+      navigation.navigate('Dashboard'); // Redireciona para a tela de Dashboard após o cadastro
+
     }
     catch (e) {
+      const errorCode = e.code;
+      const errorMessage = e.message;
+      setMessage(`Erro ao fazer login`);
+      setMessageColor('red');
       console.error("Erro ao fazer login:", e.message);
-      setError("Erro ao fazer login. Verifique suas credenciais.");
     }
   }
 
@@ -56,7 +59,7 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {message ? <Text style={[styles.message, {color: messageColor}]}>{message}</Text> : null}
 
       <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
         <Text style={styles.loginButtonText}>Login</Text>
@@ -103,7 +106,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 14
   },
-  error: { color: 'red', textAlign: 'center', marginBottom: 10 },
+  message: { textAlign: 'center', marginBottom: 10, fontSize: 14 },
+
   loginButton: {
     backgroundColor: '#000',
     padding: 14,

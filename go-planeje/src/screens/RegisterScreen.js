@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { auth } from '../../firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export default function LoginScreen({ navigation }) {
@@ -12,9 +12,9 @@ export default function LoginScreen({ navigation }) {
   const [senha, setSenha] = useState('');
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState('');
-  
 
-   const handleSignUp = async (email, password) => {
+
+  const handleSignUp = async (email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
@@ -22,7 +22,9 @@ export default function LoginScreen({ navigation }) {
       setMessageColor('green');
       console.log("usuario criado");
 
-    navigation.navigate('Dashboard'); // Redireciona para a tela de Dashboard após o cadastro
+      await signInWithEmailAndPassword(auth, email, password); // Faz login automático após o cadastro
+
+      navigation.navigate('Dashboard'); // Redireciona para a tela de Dashboard após o cadastro
     } catch (error) {
       const erroCode = error.code;
       const erroMessage = error.message;

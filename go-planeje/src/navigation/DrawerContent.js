@@ -1,6 +1,7 @@
 import React from 'react';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { View, Text } from 'react-native';
+import { auth } from '../../firebaseConfig';
+import { signOut } from 'firebase/auth';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function DrawerContent({ navigation }) {
@@ -9,17 +10,19 @@ export default function DrawerContent({ navigation }) {
       <DrawerItem
         label="Início"
         icon={() => <Icon name="home-outline" size={22} />}
-        onPress={() => navigation.navigate('Dashboard')}
+        onPress={() => navigation.navigate('Stack', { screen: 'Dashboard'})}
       />
       <DrawerItem
         label="Perfil"
         icon={() => <Icon name="person-outline" size={22} />}
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => navigation.navigate('Stack', { screen: 'Setting' })}
       />
       <DrawerItem
         label="Sair"
         icon={() => <Icon name="log-out-outline" size={22} />}
-        onPress={() => {/* lógica de logout */}}
+        onPress={() => {
+          signOut(auth);
+        }}
       />
     </DrawerContentScrollView>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
 import AuthNavigator from './src/navigation/AuthNavigator';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -21,7 +22,8 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <NavigationContainer>
+
       {user ? (
         <AppNavigator />
       ) :
@@ -29,7 +31,7 @@ export default function App() {
           <AuthNavigator />
         )
       }
-    </>
+    </NavigationContainer>
 
   )
 }

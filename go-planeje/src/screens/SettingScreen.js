@@ -7,6 +7,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { Ionicons, Feather, MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 
 export default function SettingScreen({ navigation }) {
+  function SettingItem({ icon, label, screenToNavigate }) {
+    return (
+      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Stack', { screen: screenToNavigate})}>
+        <View style={styles.icon}>{icon}</View>
+        <Text style={styles.label}>{label}</Text>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Settings</Text>
@@ -14,7 +23,7 @@ export default function SettingScreen({ navigation }) {
       {/* Account Section */}
       <Text style={styles.sectionTitle}>Account</Text>
       <View style={styles.card}>
-        <SettingItem icon={<Ionicons name="person-outline" size={20} />} label="Edit profile" />
+        <SettingItem icon={<Ionicons name="person-outline" size={20} />} label="Edit profile" screenToNavigate={'EditProfile'}/>
         <SettingItem icon={<Ionicons name="shield-checkmark-outline" size={20} />} label="Security" />
         <SettingItem icon={<Ionicons name="notifications-outline" size={20} />} label="Notifications" />
         <SettingItem icon={<Feather name="lock" size={20} />} label="Privacy" />
@@ -46,14 +55,6 @@ export default function SettingScreen({ navigation }) {
   );
 }
 
-function SettingItem({ icon, label }) {
-  return (
-    <TouchableOpacity style={styles.item}>
-      <View style={styles.icon}>{icon}</View>
-      <Text style={styles.label}>{label}</Text>
-    </TouchableOpacity>
-  );
-}
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#fff' },

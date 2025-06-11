@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }) {
 
       {message ? <Text style={[styles.message, {color: messageColor}]}>{message}</Text> : null}
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => handleSignIn(email, senha)}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
